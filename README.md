@@ -1,4 +1,8 @@
 # ESL Writing Classification
 ## Datasets
-## Data Compilation
-## Data Cleaning
+## Compilation
+## Cleaning
+## Augmentation
+## Balancing
+## Feature Selection
+## Model Selection
