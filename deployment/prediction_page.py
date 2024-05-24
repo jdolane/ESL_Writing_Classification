@@ -1005,17 +1005,6 @@ def load_model():
 
 model = load_model()
 
-# def load_model(zip_path='ESL_Writing_Classification/deployment/random_forest_smote_67.zip', model_filename='random_forest_smote_67.pkl'):
-#     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-#         zip_ref.extract(model_filename)
-#     with open(model_filename, 'rb') as file:
-#         loaded_model = pickle.load(file)
-#     # Optionally delete the extracted file after loading
-#     os.remove(model_filename)
-#     return loaded_model
-
-model = load_model()
-
 def count_patterns(text, matcher):
     """Count the number of pattern matches in the text."""
     doc = nlp(text)
