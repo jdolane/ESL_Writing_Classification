@@ -1076,7 +1076,7 @@ def show_predict_page():
 
     if submit:
         df = pd.DataFrame({'answer': [text]})
-        result_df = find_patterns(df)
+        df = find_patterns(df)
         # feature_columns = result_df.drop(columns=['answer','preprocessed_text','doc_vector','present_continuous_passive_modal', 'present_perfect_continuous_passive_modal'])
         # features = result_df[feature_columns].values
         # doc_vectors = np.stack(result_df['doc_vector'].values)
