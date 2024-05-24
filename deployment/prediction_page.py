@@ -998,19 +998,19 @@ patterns_dict = {
 for pattern_name, pattern_list in patterns_dict.items():
     matcher.add(f'{pattern_name}', [pattern_list])
 
-# def load_model():
-#     with open('random_forest_smote_67.pkl', 'rb') as file:
-#         loaded_model = pickle.load(file)
-#     return loaded_model
-
-# model = load_model()
-
 def load_model():
-    # Unzip the file
-    with zipfile.ZipFile("random_forest_smote_67.zip", "r") as zip_ref:
-        zip_ref.extractall("survey_results_public")
+    with open('random_forest_smote.pkl', 'rb') as file:
+        loaded_model = pickle.load(file)
+    return loaded_model
 
 model = load_model()
+
+# def load_model():
+#     # Unzip the file
+#     with zipfile.ZipFile("random_forest_smote_67.zip", "r") as zip_ref:
+#         zip_ref.extractall("survey_results_public")
+
+# model = load_model()
 
 def count_patterns(text, matcher):
     """Count the number of pattern matches in the text."""
