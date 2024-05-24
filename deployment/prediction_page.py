@@ -997,9 +997,20 @@ patterns_dict = {
 for pattern_name, pattern_list in patterns_dict.items():
     matcher.add(f'{pattern_name}', [pattern_list])
 
-def load_model():
-    with open('random_forest_smote_67.pkl', 'rb') as file:
+# def load_model():
+#     with open('random_forest_smote_67.pkl', 'rb') as file:
+#         loaded_model = pickle.load(file)
+#     return loaded_model
+
+# model = load_model()
+
+def load_model(zip_path='random_forest_smote_67.zip', model_filename='random_forest_smote_67.pkl'):
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extract(model_filename)
+    with open(model_filename, 'rb') as file:
         loaded_model = pickle.load(file)
+    # Optionally delete the extracted file after loading
+    os.remove(model_filename)
     return loaded_model
 
 model = load_model()
