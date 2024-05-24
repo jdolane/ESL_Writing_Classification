@@ -995,7 +995,13 @@ for pattern_name, pattern_list in patterns_dict.items():
     matcher.add(f'{pattern_name}', [pattern_list])
 
 def load_model():
-    with open('random_forest_model.pkl', 'rb') as file:
+    # Get the directory of the current script
+    script_dir = os.path.dirname(__file__)
+    # Construct the absolute path to the model file
+    file_path = os.path.join(script_dir, 'random_forest_model.pkl')
+    
+    # Open and load the model file
+    with open(file_path, 'rb') as file:
         loaded_model = pickle.load(file)
     return loaded_model
 
