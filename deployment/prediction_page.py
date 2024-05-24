@@ -998,7 +998,7 @@ def load_model():
     # Get the directory of the current script
     script_dir = os.path.dirname(__file__)
     # Construct the absolute path to the model file
-    file_path = os.path.join(script_dir, 'random_forest_model.pkl')
+    file_path = os.path.join(script_dir, 'random_forest_smote_67.pkl')
     
     # Open and load the model file
     with open(file_path, 'rb') as file:
@@ -1077,17 +1077,17 @@ def show_predict_page():
     if submit:
         df = pd.DataFrame({'answer': [text]})
         result_df = find_patterns(df)
-        feature_columns = result_df.drop(columns=['answer','preprocessed_text','doc_vector','present_continuous_passive_modal', 'present_perfect_continuous_passive_modal'])
-        features = result_df[feature_columns].values
-        doc_vectors = np.stack(result_df['doc_vector'].values)
-        X = np.hstack((features, doc_vectors))
-        # df = df.reset_index(drop=True)
-        # doc_vectors_df = pd.DataFrame(df['doc_vector'].values.tolist(), columns=[f'doc_vector_{i}' for i in range(300)])
-        # doc_vectors_df = doc_vectors_df.reset_index(drop=True)
-        # df_concat = pd.concat([df, doc_vectors_df], axis=1)
-        # X = df_concat.drop(['answer', 'preprocessed_text', 'doc_vector'],axis=1)
-        # normalizer = Normalizer()
-        # X = normalizer.transform(X)
+        # feature_columns = result_df.drop(columns=['answer','preprocessed_text','doc_vector','present_continuous_passive_modal', 'present_perfect_continuous_passive_modal'])
+        # features = result_df[feature_columns].values
+        # doc_vectors = np.stack(result_df['doc_vector'].values)
+        # X = np.hstack((features, doc_vectors))
+        df = df.reset_index(drop=True)
+        doc_vectors_df = pd.DataFrame(df['doc_vector'].values.tolist(), columns=[f'doc_vector_{i}' for i in range(300)])
+        doc_vectors_df = doc_vectors_df.reset_index(drop=True)
+        df_concat = pd.concat([df, doc_vectors_df], axis=1)
+        X = df_concat.drop(['answer', 'preprocessed_text', 'doc_vector'],axis=1)
+        normalizer = Normalizer()
+        X = normalizer.transform(X)
         predicted_class = model.predict(X)
         st.markdown(f"""
             <div style='background-color: #f0f0f0; padding: 10px; border-radius: 5px'>
