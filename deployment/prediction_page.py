@@ -11,10 +11,6 @@ from sklearn.preprocessing import Normalizer
 nlp = spacy.load('en_core_web_lg')
 matcher = DependencyMatcher(nlp.vocab)
 
-# # Open the pattern JSON file
-# with open("patterns.json", "r") as file:
-#     patterns_dict = json.load(file)
-
 patterns_dict = {
     "present_simple_active": [
         {
@@ -1005,13 +1001,6 @@ def load_model():
 
 model = load_model()
 
-# def load_model():
-#     # Unzip the file
-#     with zipfile.ZipFile("random_forest_smote_67.zip", "r") as zip_ref:
-#         zip_ref.extractall("survey_results_public")
-
-# model = load_model()
-
 def count_patterns(text, matcher):
     """Count the number of pattern matches in the text."""
     doc = nlp(text)
@@ -1023,9 +1012,9 @@ def count_patterns(text, matcher):
     return counts
 
 def preprocess_text(doc):
-    """Remove stop words, punctuation, nouns, lemmatize the text, and return the document vector."""
-    # Remove stop words, punctuation, and nouns, and lemmatize
-    tokens = [token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
+    """Remove stop words, lemmatize the text, and return the document vector."""
+    # Remove stop words and lemmatize
+    tokens = [token.lemma_ for token in doc if not token.is_stop]
     # Join the tokens back to a single string (if needed)
     preprocessed_text = ' '.join(tokens)
     # Return the document vector
@@ -1071,7 +1060,6 @@ def find_patterns(df):
         df.at[index, 'preprocessed_text'] = preprocessed_text
         df.at[index, 'doc_vector'] = vector
     
-    print(df)
     return df
 
 def show_predict_page():
@@ -1082,14 +1070,18 @@ def show_predict_page():
 
     if submit:
         df = pd.DataFrame({'answer': [text]})
-        df = find_patterns(df)
-        df = df.reset_index(drop=True)
-        doc_vectors_df = pd.DataFrame(df['doc_vector'].values.tolist(), columns=[f'doc_vector_{i}' for i in range(300)])
-        doc_vectors_df = doc_vectors_df.reset_index(drop=True)
-        df_concat = pd.concat([df, doc_vectors_df], axis=1)
-        X = df_concat.drop(['answer', 'preprocessed_text', 'doc_vector'],axis=1)
-        normalizer = Normalizer()
-        X = normalizer.transform(X)
+        result_df = find_patterns(df)
+        feature_columns = result_df.drop(columns=['answer','preprocessed_text','doc_vector','present_continuous_passive_modal', 'present_perfect_continuous_passive_modal'])
+        features = result_df[feature_columns].values
+        doc_vectors = np.stack(result_df['doc_vector'].values)
+        X = np.hstack((features, doc_vectors))
+        # df = df.reset_index(drop=True)
+        # doc_vectors_df = pd.DataFrame(df['doc_vector'].values.tolist(), columns=[f'doc_vector_{i}' for i in range(300)])
+        # doc_vectors_df = doc_vectors_df.reset_index(drop=True)
+        # df_concat = pd.concat([df, doc_vectors_df], axis=1)
+        # X = df_concat.drop(['answer', 'preprocessed_text', 'doc_vector'],axis=1)
+        # normalizer = Normalizer()
+        # X = normalizer.transform(X)
         predicted_class = model.predict(X)
         st.markdown(f"""
             <div style='background-color: #f0f0f0; padding: 10px; border-radius: 5px'>
