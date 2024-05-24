@@ -999,7 +999,7 @@ for pattern_name, pattern_list in patterns_dict.items():
     matcher.add(f'{pattern_name}', [pattern_list])
 
 def load_model():
-    with open('random_forest_smote.pkl', 'rb') as file:
+    with open('random_forest_model.pkl', 'rb') as file:
         loaded_model = pickle.load(file)
     return loaded_model
 
