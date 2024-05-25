@@ -1142,7 +1142,7 @@ def show_predict_page():
                         <td>{"{:.2f}".format(df['avg_sentence_len'].iloc[0])} words per sentence</td>
                     </tr>
                     <tr>
-                        <td>Grammatical features: </td>
+                        <td>Verb tenses used: </td>
                         <td>{formatted_columns}</td>
                     </tr>
                 </table>
