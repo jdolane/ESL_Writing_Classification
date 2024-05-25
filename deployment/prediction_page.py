@@ -1007,25 +1007,20 @@ def load_model():
 
 model = load_model()
 
+# Define functions to extract features
 def count_patterns(text, matcher):
     """Count the number of pattern matches in the text."""
+    # convert text to nlp doc
     doc = nlp(text)
+    # store the matches
     matches = matcher(doc)
+    # count the matches
+    # count matches in respective columns
     counts = {pattern_name: 0 for pattern_name in patterns_dict.keys()}
     for match_id, token_ids in matches:
         pattern_name = matcher.vocab.strings[match_id]
         counts[pattern_name] += 1
     return counts
-
-def preprocess_text(doc):
-    """Remove stop words, lemmatize the text, and return the document vector."""
-    # Remove stop words and lemmatize
-    tokens = [token.lemma_ for token in doc if not token.is_stop]
-    # Join the tokens back to a single string (if needed)
-    preprocessed_text = ' '.join(tokens)
-    # Return the document vector
-    vector = doc.vector
-    return preprocessed_text, vector
 
 def find_patterns(df):
     df = df.copy()
@@ -1037,7 +1032,6 @@ def find_patterns(df):
     
     df['num_sentences'] = 0
     df['avg_sentence_len'] = 0.0
-    df['preprocessed_text'] = ""
     df['doc_vector'] = None
     
     for index, row in df.iterrows():
@@ -1059,12 +1053,10 @@ def find_patterns(df):
         # Count patterns in the original text
         pattern_counts = count_patterns(answer_text, matcher)
         for pattern_name, count in pattern_counts.items():
-            df.at[index, pattern_name] = count / num_sentences if num_sentences > 0 else 0
-        
-        # Then preprocess the text
-        preprocessed_text, vector = preprocess_text(doc)
-        df.at[index, 'preprocessed_text'] = preprocessed_text
-        df.at[index, 'doc_vector'] = vector
+            df.at[index, pattern_name] = count
+
+        # Vectorize the text
+        df.at[index, 'doc_vector'] = doc.vector
     
     return df
 
@@ -1077,15 +1069,11 @@ def show_predict_page():
     if submit:
         df = pd.DataFrame({'answer': [text]})
         df = find_patterns(df)
-        # feature_columns = result_df.drop(columns=['answer','preprocessed_text','doc_vector','present_continuous_passive_modal', 'present_perfect_continuous_passive_modal'])
-        # features = result_df[feature_columns].values
-        # doc_vectors = np.stack(result_df['doc_vector'].values)
-        # X = np.hstack((features, doc_vectors))
-        df = df.reset_index(drop=True)
-        doc_vectors_df = pd.DataFrame(df['doc_vector'].values.tolist(), columns=[f'doc_vector_{i}' for i in range(300)])
-        doc_vectors_df = doc_vectors_df.reset_index(drop=True)
-        df_concat = pd.concat([df, doc_vectors_df], axis=1)
-        X = df_concat.drop(['answer', 'preprocessed_text', 'doc_vector'],axis=1)
+        df_avg_sentence_len = df['avg_sentence_len']
+        verbs_df = df.drop(['answer','doc_vector','num_sentences'],axis=1) **2
+        vectors_df = pd.DataFrame(df['doc_vector'].values.tolist(), columns=[f'doc_vector_{i}' for i in range(300)])
+        df_concat = pd.concat([df_avg_sentence_len, verbs_df, vectors_df], axis=1)
+        X = df_concat
         normalizer = Normalizer()
         X = normalizer.transform(X)
         predicted_class = model.predict(X)
