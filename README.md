@@ -1,6 +1,14 @@
 # ESL Writing Classification
 <p>The latest version of deployed model is on the <a href="https://gradespeare.streamlit.app/" target="_blank">GradeSpeare</a> app.</p>
 
+- [Overview](#overview)
+- [Datasets](#datasets)
+- [Compilation and Cleaning](#compilation-and-cleaning)
+- [Augmentation and Balancing](#augmentation-and-balancing)
+- [NLP - Dependency Matching and Doc Vectors](#nlp---dependency-matching-and-doc-vectors)
+- [Model Selection](#model-selection)
+- [References](#references)
+
 ## Overview
 <p>This is my capstone project for the <a href="https://www.concordiabootcamps.ca/lp/data-science-lp-2?utm_term=data%20science%20course&utm_campaign=Search_MTL&utm_source=adwords&utm_medium=ppc&hsa_acc=3838886679&hsa_cam=21258988525&hsa_grp=159297764102&hsa_ad=698842094834&hsa_src=g&hsa_tgt=kwd-27111326778&hsa_kw=data%20science%20course&hsa_mt=b&hsa_net=adwords&hsa_ver=3&gad_source=1&gclid=Cj0KCQjwmMayBhDuARIsAM9HM8cIwxytsOtn7U2dY3yU9LpthFIRA6TdJUJIYlJ55XLvv580bPaAh50aAtfmEALw_wcB" target="_blank">Concordia Data Science Diploma program.</a> Its goal is to create a model that can predict the level of a written text according to the <a href="https://www.coe.int/en/web/common-european-framework-reference-languages/level-descriptions#:~:text=The%20CEFR%20organises%20language%20proficiency,needs%20of%20the%20local%20context." target="_blank">CEFR</a>.</p>
 <p>The current model is a multi-layer perceptron (MLP) classifier, and it predicts the level with 75% overall accuracy. It was trained on 5,943 texts from the <a href="https://github.com/ELI-Data-Mining-Group/PELIC-dataset/" target="_blank">PELIC</a> dataset, 194 texts from the <a href="https://cental.uclouvain.be/team/atack/cefr-asag/">ASAG</a> dataset, and 862 artificially augmented texts. The level that is predicted is a combination of the 'level_id' variable from the PELIC dataset, and the 'grade_majority_vote' variable from the ASAG dataset. 'level_id' indicates the level of the English course that the writer was taking at the time of production. 'grade_majority_vote' indicates the majority vote of three grades given by trained TOEFL examiners.</p>
@@ -39,7 +47,72 @@
 
 <p>Once the answers of the level 2 class were augmented, the answers from the remaining classes (3, 4, and 5) were reduced. The reduction was not random; rather, a function was used to choose the longest answers first, and to not choose an answer from the same question twice, where possible, until the data was balanced. The balancing function is found in the notebooks in the <a href="https://github.com/jdolane/ESL_Writing_Classification/tree/main/notebooks/balance" target="_blank">balancing</a> folder.</p>
 
-## NLP Dependency Matching
+<img src="images/augmented_by_dataset.png" alt="Count of Augmented Rows by Dataset" width="50%">
+
+## NLP - Dependency Matching and Doc Vectors
+<p>Patterns for 26 verb tense combinations, 3 gerund dependencies, and two modal verbs were defined using spaCy's DependencyMatcher. The count of these patterns, along with the number of sentences and the average sentence length per answer, were calculated. The dependency patterns were squared before adding them to X to increase their chance of being detected during model training. The average sentence length was added to X raw, and the number of sentences was excluded from X (the sheer number of sentences wasn't expected to be a good indicator of level).</p>
+
+<p>Patterns were created and combined using the functions in the <a href="https://github.com/jdolane/ESL_Writing_Classification/tree/main/notebooks/pattern_matching">pattern_matching</a> notebook folder. The pattern dictionary is in a <a href="https://github.com/jdolane/ESL_Writing_Classification/blob/main/patterns/patterns.json">.json file</a> in the patterns folder.</p>
+
+<p>The following verbal structures were searched for. A search with auxiliaries ("aux") is included where appropriate to include negatives. Searches with modals ("modal") exclude the lemmas <i>will</i> and <i>would</i> so that these could be searched for separately:</p>
+
+| Tense    | Aspect | Voice   | Aux <i>do</i> | Modal |
+|----------|--------|---------|-----|-------|
+| Present  | Simple | Active  | ✓ | ✓   |
+| Present  | Simple | Passive |   | ✓   |
+| Present  | Continuous | Active  |   | ✓   |
+| Present  | Continuous | Passive |   | ✓   |
+| Present  | Perfect | Active  |   | ✓   |
+| Present  | Perfect | Passive |   | ✓   |
+| Present  | Perfect-Continuous | Active |   | ✓   |
+| Present  | Perfect-Continuous | Passive |   | ✓   |
+| Past     | Simple | Active  | ✓ |    |
+| Past     | Simple | Passive |   |     |
+| Past     | Continuous | Active  |   |     |
+| Past     | Continuous | Passive |   |    |
+| Past     | Perfect | Active  |   |     |
+| Past     | Perfect | Passive |   |    |
+| Past     | Perfect-Continuous | Active |   |    |
+| Past     | Perfect-Continuous | Passive |   |    |
+
+| Tag | Dependency | 
+|-----------|---------|
+| Gerund | subject |
+| Gerund | complement of a preposition |
+| Gerund | open complement |
+
+| Tag | Lemma |
+|-----|-------|
+| Modal | <i>will</i> |
+| Modal | <i>would</i> |
+
+
+### Average counts of top features per answer
+
+| Feature                      | Level 2 | Level 3 | Level 4 | Level 5 |
+|------------------------------|---------|---------|---------|---------|
+| present simple active        | 2.097   | 3.976   | 7.805   | 6.954   |
+| past simple active           | 0.958   | 1.534   | 2.805   | 3.263   |
+| <i>will</i>                         | 0.202   | 0.385   | 0.645   | 0.581   |
+| present continuous active    | 0.200   | 0.216   | 0.449   | 0.398   |
+| presen simple active modal  | 0.153   | 0.737   | 1.646   | 1.516   |
+| present simple active aux    | 0.110   | 0.202   | 0.404   | 0.358   |
+| present perfect active       | -       | 0.262   | 0.356   | 0.377   |
+| gerund pcomp                 | -       | 0.214   | 0.680   | 0.728   |
+| present simple passive       | -       | 0.110   | 0.330   | 0.495   |
+| gerund xcomp                 | -       | -       | 0.259   | 0.226   |
+| gerund subject               | -       | -       | 0.253   | 0.233   |
+| past continuous active       | -       | -       | 0.204   | 0.184   |
+| <i>would</i>                        | -       | -       | 0.191   | 0.285   |
+| past perfect active          | -       | -       | 0.148   | 0.172   |
+| past simple passive          | -       | 0.110   | 0.137   | 0.304   |
+| past simple active aux       | -       | -       | 0.135   | 0.172   |
+| present simple passive modal | -       | -       | -       | 0.168   |
+
+### A visual summary
+
+<img src="images/mean_features_by_level.png" alt="Count of Augmented Rows by Dataset" width="100%">
+
 ## Model Selection
 ## References
 
