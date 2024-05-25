@@ -1066,22 +1066,21 @@ def show_predict_page():
     st.write(""" ### Check the CEFR level of your paragraph. """)
     # List of values for the selectbox
     questions = [
-    'What are your daily habits? What time do you get up, etc.?',
+    'What are your daily habits?',
     'Describe your family.',
     'Describe your hobbies.',
-    'Share a memory of a holiday. Where was it, who went, what happened?',
-    "You are invited to a friend's birthday. You respond thanking him/her. Suggest some different ways that you can help him/her.",
-    'Imagine your life in 10 years time. What will it look like?',
-    "What is the best book you've ever read and why?",
-    'If you had 1 million euros, what would you do with it?',
-    'You attended an event. Write an article for your blog.',
-    'Do you think it is more important to have an enjoyable job or to make money? Explain your point of view.',
-    'Should study abroad be a compulsory part of education? Explain your point of view.',
-    'What advice would you give to help improve the environment?',
+    'Share a memory of a holiday.',
+    "Respond to a birthday invitation.",
+    'Imagine your life in 10 years time.',
+    "Describe your favorite book.",
+    'What would you do with a billion dollars?',
+    'Describe an event you attended.',
+    'Is money or enjoyment more important in a job?',
+    'Should study abroad be a compulsory part of education?',
+    'What can we do to help the environment?',
     'What is the impact of social networks on relationships?',
-    'Eating a balanced diet is the most important factor for a healthy life. Explain your point of view.',
-    'Do people who live in the public eye have a right to privacy? Explain your point of view.',
-    'Share a memory of a holiday. Where was it, who went, what happened?'
+    'Is diet the most important factor in health?',
+    'Do celebrities have a right to privacy?'
     ]
 
     # Create a selectbox
@@ -1116,7 +1115,7 @@ def show_predict_page():
             st.write("Please write at least three sentences.")
         else:
             st.markdown(f"""
-            <style>
+            <!-- <style>
                 table {{
                     width: 100%;
                     border-collapse: collapse;
@@ -1126,9 +1125,9 @@ def show_predict_page():
                     padding: 8px;
                     text-align: left;
                 }}
-            </style>
+            </style> -->
             <div style='padding: 10px; border-radius: 5px'>
-                <table>
+                <table style="width: 100%">
                     <tr>
                         <th>Estimated writing level:</th>
                         <th>{mapped_class}</th>
