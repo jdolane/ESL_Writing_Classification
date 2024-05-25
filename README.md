@@ -7,8 +7,9 @@
 
 ## Datasets
 <ol>
-  <li><a href ="https://github.com/ELI-Data-Mining-Group/PELIC-dataset/" target="_blank">The University of Pittsburgh English Language Institute Corpus (PELIC)</a></li>
-  <li><a href='https://cental.uclouvain.be/team/atack/cefr-asag/'>The CEFR-ASAG Corpus</a></li>
+  <li>The University of Pittsburgh English Language Institute Corpus (<a href ="https://github.com/ELI-Data-Mining-Group/PELIC-dataset/" target="_blank">PELIC</a>)</li>
+  <li>Université Catholique de Louvain - CEFR Automated Short Answer Grading (<a href='https://cental.uclouvain.be/team/atack/cefr-asag/'>ASAG</a>, Tack, Anaïs et al.)</li>
+  <li>[ASAG](#asag)</li>
 </ol>
 
 ## Compilation
@@ -17,3 +18,6 @@
 ## Balancing
 ## NLP Dependency Matching
 ## Model Selection
+## References
+
+- <a name="asag"></a>Tack, Anaïs, Thomas François, Sophie Roekhaut, and Cédric Fairon. "Human and Automated CEFR-based Grading of Short Answers." In Proceedings of the 12th Workshop on Innovative Use of NLP for Building Educational Applications, pp. 169-179. Association for Computational Linguistics, 2017. [Paper](https://www.aclweb.org/anthology/W17-5018) [DOI](https://doi.org/10.18653/v1/W17-5018)
