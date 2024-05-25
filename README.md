@@ -26,7 +26,18 @@
 <p>Instead of choosing a minimum answer length, <b>spaCy</b> was used to filter out answers that did not contain at least one subject and one verb. This allowed for the conservation of data from level 2, and eliminated one-word responses and multiple-choice answers. No maxiumum answer length was set.</p>
 
 ## Augmentation and Balancing
-The <b>PELIC</b> dataset 
+<p>The <b>PELIC</b> dataset was very imbalanced by level, with the following value counts:</p>
+
+| level | count |
+|-------|-------|
+| 4     | 12163 |
+| 5     | 10094 |
+| 3     | 7993  |
+| 2     | 849   |
+
+<p>To address this issue, the level 2 class was doubled using GPT2Tokenizer and GPT2LMHeadModel. The texts were augmented by using AI to rephrase and generate a continuation of each answer. The second half of the AI generated texts were then truncated to get the augmented data sample. The generator uses top-k and nucleus sampling, which helps to retain the style of the text. It was considered that a simpler augmentation technique could be used, such as random shuffling and insertion, or synonym replacement; however, this wouldn't have conserved the grammatical structure of the answers, which is needed to be able to match patterns. The augmentation function is found in <a href="https://github.com/jdolane/ESL_Writing_Classification/blob/main/notebooks/augment/Augment.ipynb" target="_blank">Augment.ipynb</a></p>
+
+<p>Once the answers of the level 2 class were augmented, the answers from the remaining classes (3, 4, and 5) were reduced. The reduction was not random; rather, a function was used to choose the longest answers first, and to not choose an answer from the same question twice, where possible, until the data was balanced. The balancing function is found in the notebooks in the <a href="https://github.com/jdolane/ESL_Writing_Classification/tree/main/notebooks/balance" target="_blank">balancing</a> folder.</p>
 
 ## NLP Dependency Matching
 ## Model Selection
