@@ -1061,9 +1061,32 @@ def find_patterns(df):
     return df
 
 def show_predict_page():
-    st.title("ESL Writing Classification")
-    st.write(""" ### Provide the following info""")
-    text = st.text_area("Input text here")
+    st.title("GradeSpeare")
+    st.write(""" #### <i>To grade, or not to grade?</i> """, unsafe_allow_html=True)
+    st.write(""" ### Choose a question to answer in paragraph form. """)
+    # List of values for the selectbox
+    questions = [
+    'What are your daily habits? What time do you get up, etc.?',
+    'Describe your family.',
+    'Describe your hobbies.',
+    'Share a memory of a holiday. Where was it, who went, what happened?',
+    "You are invited to a friend's birthday. You respond thanking him/her. Suggest some different ways that you can help him/her.",
+    'Imagine your life in 10 years time. What will it look like?',
+    "What is the best book you've ever read and why?",
+    'If you had 1 million euros, what would you do with it?',
+    'You attended an event. Write an article for your blog.',
+    'Do you think it is more important to have an enjoyable job or to make money? Explain your point of view.',
+    'Should study abroad be a compulsory part of education? Explain your point of view.',
+    'What advice would you give to help improve the environment?',
+    'What is the impact of social networks on relationships?',
+    'Eating a balanced diet is the most important factor for a healthy life. Explain your point of view.',
+    'Do people who live in the public eye have a right to privacy? Explain your point of view.',
+    'Share a memory of a holiday. Where was it, who went, what happened?'
+    ]
+
+    # Create a selectbox
+    st.selectbox('Select a writing prompt:', questions)
+    text = st.text_area("Write a paragraph, three sentences or more:")
     submit = st.button("Submit")
 
     if submit:
@@ -1077,16 +1100,49 @@ def show_predict_page():
         normalizer = Normalizer()
         X = normalizer.transform(X)
         predicted_class = model.predict(X)
-        st.markdown(f"""
-            <div style='background-color: #f0f0f0; padding: 10px; border-radius: 5px'>
-                <table style='width: 80%; border-collapse: collapse;'>
+        class_mapping = {
+            2: "A2/B1: Pre-Intermediate",
+            3: "B1: Intermediate",
+            4: "B1+/B2: Upper-Intermediate",
+            5: "B2+/C1: Advanced"
+        }
+        mapped_class = [class_mapping[pred] for pred in predicted_class]
+        mapped_class = ', '.join(mapped_class)
+        columns_with_positive_values = verbs_df.columns[(verbs_df > 0).any()]
+        formatted_columns = [col.replace('_', ' ') for col in columns_with_positive_values]
+        formatted_columns = ', '.join(formatted_columns)
+        if df['num_sentences'].iloc[0] < 3:
+            st.write("Please write at least three sentences.")
+        else:
+            st.markdown(f"""
+            <style>
+                table {{
+                    width: 100%;
+                    border-collapse: collapse;
+                }}
+                th, td {{
+                    border: none;
+                    padding: 8px;
+                    text-align: left;
+                }}
+            </style>
+            <div style='padding: 10px; border-radius: 5px'>
+                <table>
                     <tr>
-                    <th>Predicted Class:</th>
-                    <th>{predicted_class}</th>
+                        <th>Estimated writing level:</th>
+                        <th>{mapped_class}</th>
                     </tr>
                     <tr>
                         <td>Number of sentences:</td>
                         <td>{df['num_sentences'].iloc[0]}</td>
+                    </tr>
+                    <tr>
+                        <td>Average sentence length:</td>
+                        <td>{df['avg_sentence_len'].iloc[0]} words per sentence</td>
+                    </tr>
+                    <tr>
+                        <td>Grammatical features: </td>
+                        <td>{formatted_columns}</td>
                     </tr>
                 </table>
             </div>
