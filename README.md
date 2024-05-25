@@ -39,6 +39,8 @@
 
 <p>Once the answers of the level 2 class were augmented, the answers from the remaining classes (3, 4, and 5) were reduced. The reduction was not random; rather, a function was used to choose the longest answers first, and to not choose an answer from the same question twice, where possible, until the data was balanced. The balancing function is found in the notebooks in the <a href="https://github.com/jdolane/ESL_Writing_Classification/tree/main/notebooks/balance" target="_blank">balancing</a> folder.</p>
 
+<img src="images/augmented_by_dataset.png" alt="Count of Augmented Rows by Dataset" width="50%">
+
 ## NLP Dependency Matching
 ## Model Selection
 ## References
