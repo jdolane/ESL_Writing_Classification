@@ -998,7 +998,7 @@ def load_model():
     # Get the directory of the current script
     script_dir = os.path.dirname(__file__)
     # Construct the absolute path to the model file
-    file_path = os.path.join(script_dir, 'random_forest_smote_67.pkl')
+    file_path = os.path.join(script_dir, 'mlp_balanced.pkl')
     
     # Open and load the model file
     with open(file_path, 'rb') as file:
@@ -1070,7 +1070,7 @@ def show_predict_page():
         df = pd.DataFrame({'answer': [text]})
         df = find_patterns(df)
         df_avg_sentence_len = df['avg_sentence_len']
-        verbs_df = df.drop(['answer','doc_vector','num_sentences'],axis=1) **2
+        verbs_df = df.drop(['answer','doc_vector','num_sentences','avg_sentence_len'],axis=1) **2
         vectors_df = pd.DataFrame(df['doc_vector'].values.tolist(), columns=[f'doc_vector_{i}' for i in range(300)])
         df_concat = pd.concat([df_avg_sentence_len, verbs_df, vectors_df], axis=1)
         X = df_concat
