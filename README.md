@@ -5,7 +5,7 @@
 - [Datasets](#datasets)
 - [Compilation and Cleaning](#compilation-and-cleaning)
 - [Augmentation and Balancing](#augmentation-and-balancing)
-- [NLP Dependency Matching](#nlp---dependency-matching-and-doc-vectors)
+- [NLP - Dependency Matching and Doc Vectors](#nlp---dependency-matching-and-doc-vectors)
 - [Model Selection](#model-selection)
 - [References](#references)
 
@@ -50,7 +50,43 @@
 <img src="images/augmented_by_dataset.png" alt="Count of Augmented Rows by Dataset" width="50%">
 
 ## NLP - Dependency Matching and Doc Vectors
-<p>Patterns for 26 verb tense combinations, 3 gerund dependencies, and two modal verbs were defined using spaCy's DependencyMatcher. These patterns, along with the number of sentences and the average sentence length, </p>
+<p>Patterns for 26 verb tense combinations, 3 gerund dependencies, and two modal verbs were defined using spaCy's DependencyMatcher. The count of these patterns, along with the number of sentences and the average sentence length per answer, were calculated. The dependency patterns were squared before adding them to X to increase their chance of being detected during model training. The average sentence length was added to X raw, and the number of sentences was excluded from X (the sheer number of sentences wasn't expected to be a good indicator of level).</p>
+
+<p>The following verbal structures were searched for. A search with auxiliaries ("aux") is included where appropriate to include negatives. Searches with modals ("modal") exclude the lemmas <i>will</i> and <i>would</i> so that these could be searched for separately:</p>
+
+<ul>
+  <li>present simple active</li>
+  <li>present simple active aux</li>
+  <li>present simple active modal</li>
+  <li>present simple passive</li>
+  <li>present simple passive modal</li>
+  <li>present continuous active</li>
+  <li>present continuous active modal</li>
+  <li>present continuous passive</li>
+  <li>present continuous passive modal</li>
+  <li>present perfect active</li>
+  <li>present perfect active modal</li>
+  <li>present perfect passive</li>
+  <li>present perfect passive modal</li>
+  <li>present perfect continuous active</li>
+  <li>present perfect continuous active modal</li>
+  <li>present perfect continuous passive</li>
+  <li>present perfect continuous passive modal</li>
+  <li>past simple active</li>
+  <li>past simple active aux</li>
+  <li>past simple passive</li>
+  <li>past continuous active</li>
+  <li>past continuous passive</li>
+  <li>past perfect active</li>
+  <li>past perfect passive</li>
+  <li>past perfect continuous active</li>
+  <li>past perfect continuous passive</li>
+  <li>modal <i>will</i></li>
+  <li>modal <i>would</i></li>
+  <li>gerund as subject</li>
+  <li>gerund as complement of a preposition</li>
+  <li>gerund as an open complement</li>
+</ul>
 
 ## Model Selection
 ## References
