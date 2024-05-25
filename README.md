@@ -52,6 +52,8 @@
 ## NLP - Dependency Matching and Doc Vectors
 <p>Patterns for 26 verb tense combinations, 3 gerund dependencies, and two modal verbs were defined using spaCy's DependencyMatcher. The count of these patterns, along with the number of sentences and the average sentence length per answer, were calculated. The dependency patterns were squared before adding them to X to increase their chance of being detected during model training. The average sentence length was added to X raw, and the number of sentences was excluded from X (the sheer number of sentences wasn't expected to be a good indicator of level).</p>
 
+<p>The pattern dictionary is in a <a href="https://github.com/jdolane/ESL_Writing_Classification/blob/main/patterns/patterns.json">.json file</a> in the patterns folder.</p>
+
 <p>The following verbal structures were searched for. A search with auxiliaries ("aux") is included where appropriate to include negatives. Searches with modals ("modal") exclude the lemmas <i>will</i> and <i>would</i> so that these could be searched for separately:</p>
 
 <ul>
@@ -87,6 +89,10 @@
   <li>gerund as complement of a preposition</li>
   <li>gerund as an open complement</li>
 </ul>
+
+<p>Here is a visual summary of what was found by level:</p>
+
+<img src="images/mean_features_by_level.png" alt="Count of Augmented Rows by Dataset" width="100%">
 
 ## Model Selection
 ## References
