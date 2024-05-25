@@ -5,7 +5,7 @@
 - [Datasets](#datasets)
 - [Compilation and Cleaning](#compilation-and-cleaning)
 - [Augmentation and Balancing](#augmentation-and-balancing)
-- [NLP Dependency Matching](#nlp-dependency-matching)
+- [NLP Dependency Matching](#nlp---dependency-matching-and-doc-vectors)
 - [Model Selection](#model-selection)
 - [References](#references)
 
@@ -49,7 +49,9 @@
 
 <img src="images/augmented_by_dataset.png" alt="Count of Augmented Rows by Dataset" width="50%">
 
-## NLP Dependency Matching
+## NLP - Dependency Matching and Doc Vectors
+<p>Patterns for 26 verb tense combinations, 3 gerund dependencies, and two modal verbs were defined using spaCy's DependencyMatcher. These patterns, along with the number of sentences and the average sentence length, </p>
+
 ## Model Selection
 ## References
 
