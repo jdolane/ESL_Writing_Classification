@@ -52,45 +52,64 @@
 ## NLP - Dependency Matching and Doc Vectors
 <p>Patterns for 26 verb tense combinations, 3 gerund dependencies, and two modal verbs were defined using spaCy's DependencyMatcher. The count of these patterns, along with the number of sentences and the average sentence length per answer, were calculated. The dependency patterns were squared before adding them to X to increase their chance of being detected during model training. The average sentence length was added to X raw, and the number of sentences was excluded from X (the sheer number of sentences wasn't expected to be a good indicator of level).</p>
 
-<p>The pattern dictionary is in a <a href="https://github.com/jdolane/ESL_Writing_Classification/blob/main/patterns/patterns.json">.json file</a> in the patterns folder.</p>
+<p>Patterns were created and combined using the functions in the <a href="https://github.com/jdolane/ESL_Writing_Classification/tree/main/notebooks/pattern_matching">pattern_matching</a> notebook folder. The pattern dictionary is in a <a href="https://github.com/jdolane/ESL_Writing_Classification/blob/main/patterns/patterns.json">.json file</a> in the patterns folder.</p>
 
 <p>The following verbal structures were searched for. A search with auxiliaries ("aux") is included where appropriate to include negatives. Searches with modals ("modal") exclude the lemmas <i>will</i> and <i>would</i> so that these could be searched for separately:</p>
 
-<ul>
-  <li>present simple active</li>
-  <li>present simple active aux</li>
-  <li>present simple active modal</li>
-  <li>present simple passive</li>
-  <li>present simple passive modal</li>
-  <li>present continuous active</li>
-  <li>present continuous active modal</li>
-  <li>present continuous passive</li>
-  <li>present continuous passive modal</li>
-  <li>present perfect active</li>
-  <li>present perfect active modal</li>
-  <li>present perfect passive</li>
-  <li>present perfect passive modal</li>
-  <li>present perfect continuous active</li>
-  <li>present perfect continuous active modal</li>
-  <li>present perfect continuous passive</li>
-  <li>present perfect continuous passive modal</li>
-  <li>past simple active</li>
-  <li>past simple active aux</li>
-  <li>past simple passive</li>
-  <li>past continuous active</li>
-  <li>past continuous passive</li>
-  <li>past perfect active</li>
-  <li>past perfect passive</li>
-  <li>past perfect continuous active</li>
-  <li>past perfect continuous passive</li>
-  <li>modal <i>will</i></li>
-  <li>modal <i>would</i></li>
-  <li>gerund as subject</li>
-  <li>gerund as complement of a preposition</li>
-  <li>gerund as an open complement</li>
-</ul>
+| Tense    | Aspect | Voice   | Aux <i>do</i> | Modal |
+|----------|--------|---------|-----|-------|
+| Present  | Simple | Active  | ✓ | ✓   |
+| Present  | Simple | Passive |   | ✓   |
+| Present  | Continuous | Active  |   | ✓   |
+| Present  | Continuous | Passive |   | ✓   |
+| Present  | Perfect | Active  |   | ✓   |
+| Present  | Perfect | Passive |   | ✓   |
+| Present  | Perfect-Continuous | Active |   | ✓   |
+| Present  | Perfect-Continuous | Passive |   | ✓   |
+| Past     | Simple | Active  | ✓ |    |
+| Past     | Simple | Passive |   |     |
+| Past     | Continuous | Active  |   |     |
+| Past     | Continuous | Passive |   |    |
+| Past     | Perfect | Active  |   |     |
+| Past     | Perfect | Passive |   |    |
+| Past     | Perfect-Continuous | Active |   |    |
+| Past     | Perfect-Continuous | Passive |   |    |
 
-<p>Here is a visual summary of what was found by level:</p>
+| Tag | Dependency | 
+|-----------|---------|
+| Gerund | subject |
+| Gerund | complement of a preposition |
+| Gerund | open complement |
+
+| Tag | Lemma |
+|-----|-------|
+| Modal | <i>will</i> |
+| Modal | <i>would</i> |
+
+
+### Average counts of top features per answer
+
+| Feature                      | Level 2 | Level 3 | Level 4 | Level 5 |
+|------------------------------|---------|---------|---------|---------|
+| present simple active        | 2.097   | 3.976   | 7.805   | 6.954   |
+| past simple active           | 0.958   | 1.534   | 2.805   | 3.263   |
+| <i>will</i>                         | 0.202   | 0.385   | 0.645   | 0.581   |
+| present continuous active    | 0.200   | 0.216   | 0.449   | 0.398   |
+| presen simple active modal  | 0.153   | 0.737   | 1.646   | 1.516   |
+| present simple active aux    | 0.110   | 0.202   | 0.404   | 0.358   |
+| present perfect active       | -       | 0.262   | 0.356   | 0.377   |
+| gerund pcomp                 | -       | 0.214   | 0.680   | 0.728   |
+| present simple passive       | -       | 0.110   | 0.330   | 0.495   |
+| gerund xcomp                 | -       | -       | 0.259   | 0.226   |
+| gerund subject               | -       | -       | 0.253   | 0.233   |
+| past continuous active       | -       | -       | 0.204   | 0.184   |
+| <i>would</i>                        | -       | -       | 0.191   | 0.285   |
+| past perfect active          | -       | -       | 0.148   | 0.172   |
+| past simple passive          | -       | 0.110   | 0.137   | 0.304   |
+| past simple active aux       | -       | -       | 0.135   | 0.172   |
+| present simple passive modal | -       | -       | -       | 0.168   |
+
+### A visual summary
 
 <img src="images/mean_features_by_level.png" alt="Count of Augmented Rows by Dataset" width="100%">
 
