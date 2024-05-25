@@ -7,17 +7,23 @@
 
 ## Datasets
 <ol>
-  <li>The University of Pittsburgh English Language Institute Corpus (<a href ="https://github.com/ELI-Data-Mining-Group/PELIC-dataset/" target="_blank">PELIC</a>)</li>
-  <li>Université Catholique de Louvain - CEFR Automated Short Answer Grading (<a href='https://cental.uclouvain.be/team/atack/cefr-asag/'>ASAG</a>, Tack, Anaïs et al.)</li>
-  <li>[ASAG](#asag)</li>
+  <li>The University of Pittsburgh English Language Institute Corpus (<a href ="https://github.com/ELI-Data-Mining-Group/PELIC-dataset/" target="_blank">PELIC</a>, Juffs 2020)</li>
+  <li>Université Catholique de Louvain - CEFR Automated Short Answer Grading (<a href='https://cental.uclouvain.be/team/atack/cefr-asag/' target="_blank">ASAG</a>, Tack et al.)</li>
 </ol>
+<p><b>PELIC</b> and <b>ASAG</b> compiled datasets are stored as .pkl files in the data folder. The pickle format was chosen to conserve the datatype format of the 'doc_vector' column, which is converted to a string in .csv.</p>
 
-## Compilation
-## Cleaning
-## Augmentation
-## Balancing
+## Compilation and Cleaning
+<p>The <b>PELIC</b> dataset consists of five .csv files that were merged with Pandas. The dataset includes 47 different variables. The two main variables that were used in training the model were 'answer', which is the student's written text, and 'level_id', which is the level of the course that the student was taking at the time of writing. Null values and texts of insufficient quality were removed from the dataset in such a way as to conserve as much data as possible. First, different versions of the same texts were removed, as they were essentially duplicates. Next, the answers from different course types and question types were inspected to see which questions allowed for an open text response - many of the questions in the dataset only allowed for a selection answer, which wouldn't provide good data. It was found that all course and question types could be conserved, and only answers that were not produced in an open text field were removed. After that, null values needed to be taken care of. Before dropping null values from the entire dataset, columns containing fewer that 36,304 answers were removed. These columns consisted of several variables such as birth year, gender, and test scores. It was considered that test scores could also be used as potential 'y' variables; however, keeping them in the dataset would have reduced the number of texts - it was decided that 'level_id' would serve as the data label.</p>
+<p>The <b>ASAG</b> dataset consists of 299 .xml files that were scraped using <b>BeautifulSoup</b>. The questions, answers, and grades in this dataset are very clear and didn't need to be cleaned.</p>
+<p>Instead of choosing a minimum answer length, <b>spaCy</b> was used to filter out answers that did not contain at least one subject and one verb. This allowed for the conservation of data from level 2.</p>
+
+## Augmentation and Balancing
+The <b>PELIC</b> dataset 
+
 ## NLP Dependency Matching
 ## Model Selection
 ## References
 
-- <a name="asag"></a>Tack, Anaïs, Thomas François, Sophie Roekhaut, and Cédric Fairon. "Human and Automated CEFR-based Grading of Short Answers." In Proceedings of the 12th Workshop on Innovative Use of NLP for Building Educational Applications, pp. 169-179. Association for Computational Linguistics, 2017. [Paper](https://www.aclweb.org/anthology/W17-5018) [DOI](https://doi.org/10.18653/v1/W17-5018)
+- Juffs, A., Han, N-R., & Naismith, B. (2020). The University of Pittsburgh English Language Corpus (PELIC) [Data set]. <a href="http://doi.org/10.5281/zenodo.3991977" target="_blank">http://doi.org/10.5281/zenodo.3991977</a>
+- Tack, Anaïs, Thomas François, Sophie Roekhaut, and Cédric Fairon. (2017) "Human and Automated CEFR-based Grading of Short Answers." In Proceedings of the 12th Workshop on Innovative Use of NLP for Building Educational Applications, pp. 169-179. Association for Computational Linguistics, 2017. [Paper](https://www.aclweb.org/anthology/W17-5018) [DOI](https://doi.org/10.18653/v1/W17-5018)
+
