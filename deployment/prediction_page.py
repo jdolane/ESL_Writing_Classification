@@ -1062,8 +1062,8 @@ def find_patterns(df):
 
 def show_predict_page():
     st.title("GradeSpeare")
-    st.write(""" #### <i>To grade, or not to grade?</i> """, unsafe_allow_html=True)
-    st.write(""" ### Choose a question to answer in paragraph form. """)
+    st.write(""" ##### <i>B2, or not B2? That is the question.</i> """, unsafe_allow_html=True)
+    st.write(""" ### Check the CEFR level of your paragraph. """)
     # List of values for the selectbox
     questions = [
     'What are your daily habits? What time do you get up, etc.?',
@@ -1085,7 +1085,7 @@ def show_predict_page():
     ]
 
     # Create a selectbox
-    st.selectbox('Select a writing prompt:', questions)
+    st.selectbox('Choose a writing prompt:', questions)
     text = st.text_area("Write a paragraph, three sentences or more:")
     submit = st.button("Submit")
 
@@ -1108,7 +1108,8 @@ def show_predict_page():
         }
         mapped_class = [class_mapping[pred] for pred in predicted_class]
         mapped_class = ', '.join(mapped_class)
-        columns_with_positive_values = verbs_df.columns[(verbs_df > 0).any()]
+        tenses_df = verbs_df.drop(['will', 'would', 'gerund_subject', 'gerund_pcomp', 'gerund_xcomp'],axis=1)
+        columns_with_positive_values = tenses_df.columns[(tenses_df > 0).any()]
         formatted_columns = [col.replace('_', ' ') for col in columns_with_positive_values]
         formatted_columns = ', '.join(formatted_columns)
         if df['num_sentences'].iloc[0] < 3:
@@ -1138,7 +1139,7 @@ def show_predict_page():
                     </tr>
                     <tr>
                         <td>Average sentence length:</td>
-                        <td>{df['avg_sentence_len'].iloc[0]} words per sentence</td>
+                        <td>{"{:.2f}".format(df['avg_sentence_len'].iloc[0])} words per sentence</td>
                     </tr>
                     <tr>
                         <td>Grammatical features: </td>
