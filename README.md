@@ -1,5 +1,6 @@
 # ESL Writing Classification
 <p>The latest version of deployed model is on the <a href="https://gradespeare.streamlit.app/" target="_blank">GradeSpeare</a> app.</p>
+<p><a href="https://docs.google.com/presentation/d/19e6_QFAUK229sW63oVHeXR3uEHtUPB3Tjif-lu3VW9c/edit?usp=sharing">Google Slides Presentation</a></p>
 
 - [Overview](#overview)
 - [Datasets](#datasets)
