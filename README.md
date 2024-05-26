@@ -50,6 +50,8 @@
 <img src="images/augmented_by_dataset.png" alt="Count of Augmented Rows by Dataset" width="50%">
 
 ## NLP - Dependency Matching and Doc Vectors
+<p>spaCy's doc.vector function was used to generate 300-dimensional document vectors, which were included in X. No lemmatization, stop word, or punctuation removal was done prior to vectorization. The reason for this decision was to preserve the grammatical integrity of the documents for classification, since what is being classified is not a topic, but a level of complexity.</p>
+
 <p>Patterns for 26 verb tense combinations, 3 gerund dependencies, and two modal verbs were defined using spaCy's DependencyMatcher. The count of these patterns, along with the number of sentences and the average sentence length per answer, were calculated. The dependency patterns were squared before adding them to X to increase their chance of being detected during model training. The average sentence length was added to X raw, and the number of sentences was excluded from X (the sheer number of sentences wasn't expected to be a good indicator of level).</p>
 
 <p>Patterns were created and combined using the functions in the <a href="https://github.com/jdolane/ESL_Writing_Classification/tree/main/notebooks/pattern_matching">pattern_matching</a> notebook folder. The pattern dictionary is in a <a href="https://github.com/jdolane/ESL_Writing_Classification/blob/main/patterns/patterns.json">.json file</a> in the patterns folder.</p>
@@ -77,9 +79,9 @@
 
 | Tag | Dependency | 
 |-----------|---------|
-| Gerund | subject |
-| Gerund | complement of a preposition |
-| Gerund | open complement |
+| Gerund | Subject |
+| Gerund | Complement of a Preposition |
+| Gerund | Open Complement |
 
 | Tag | Lemma |
 |-----|-------|
@@ -114,6 +116,58 @@
 <img src="images/mean_features_by_level.png" alt="Count of Augmented Rows by Dataset" width="100%">
 
 ## Model Selection
+
+Class | Level description  | CEFR level
+:---     | :---               | :---
+2        | Pre-Intermediate   | A2/B1
+3        | Intermediate       | B1
+4	       | Upper-Intermediate | B1+/B2
+5	       | Advanced           | B2+/C1
+
+### MLP Classifier
+#### Overall Accuracy: 0.74
+
+| Class | Precision | Recall | F1-Score |
+|-------|-----------|--------|----------|
+| 2    | 0.84   |   0.80   |   0.82     |
+| 3 | 0.73   |   0.77   |   0.75 |
+| 4 | 0.67   |   0.72    |  0.69 |
+| 5    |   0.74   |   0.67  |    0.71 |
+| weighted avg   |    0.74  |    0.74   |   0.74 |
+
+### Random Forest
+#### Overall Accuracy: 0.73
+
+| Class | Precision | Recall | F1-Score |
+|-------|-----------|--------|----------|
+| 2    |   0.66  |    0.90   |   0.76 |
+| 3   |    0.92  |    0.65   |   0.76 |
+| 4    |   0.73   |   0.69   |   0.71 |
+| 5   |    0.71  |    0.70   |   0.71 |
+| weighted avg   |    0.75   |   0.73   |   0.73 |
+
+### Linear SVC
+#### Overall Accuracy: 0.61
+
+| Class | Precision | Recall | F1-Score |
+|-------|-----------|--------|----------|
+| 2    |   0.72   |   0.86   |   0.78 |
+| 3    |   0.51   |   0.70   |   0.59 |
+| 4    |   0.52   |   0.17   |   0.25 |
+| 5    |   0.65   |   0.72   |   0.68 |
+| weighted avg    |  0.60   |   0.61  |    0.58 |
+
+### Logistic Regression
+#### Overall Accuracy: 0.51
+
+| Class | Precision | Recall | F1-Score |
+|-------|-----------|--------|----------|
+| 2    |   0.68  |    0.80   |   0.74 |
+| 3    |   0.40   |   0.67   |   0.50 |
+| 4   |    0.57   |   0.17   |   0.26 |
+| 5    |   0.47   |   0.40  |    0.43 |
+| weighted avg   |    0.53   |   0.51   |   0.48 |
+
 ## References
 
 - Juffs, A., Han, N-R., & Naismith, B. (2020). The University of Pittsburgh English Language Corpus (PELIC) [Data set]. <a href="http://doi.org/10.5281/zenodo.3991977" target="_blank">http://doi.org/10.5281/zenodo.3991977</a>
