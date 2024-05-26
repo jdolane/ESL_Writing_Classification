@@ -55,6 +55,7 @@
 | ASAG | 2 | 54 | 56 | 56 |
 | ASAG | 5 | 28 | 56 | 56 |
 
+### Proportion of augmented data after balancing
 <img src="images/augmented_by_dataset.png" alt="Count of Augmented Rows by Dataset" width="50%">
 
 ## NLP - Dependency Matching and Doc Vectors
