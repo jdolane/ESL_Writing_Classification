@@ -125,7 +125,7 @@
 <img src="images/mean_features_by_level.png" alt="Count of Augmented Rows by Dataset" width="100%">
 
 ## Model Selection
-
+### Class label legend
 Class | Level description  | CEFR level
 :---     | :---               | :---
 2        | Pre-Intermediate   | A2/B1
