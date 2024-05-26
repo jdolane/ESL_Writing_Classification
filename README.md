@@ -34,18 +34,21 @@
 <p>Instead of choosing a minimum answer length, <b>spaCy</b> was used to filter out answers that did not contain at least one subject and one verb. This allowed for the conservation of data from level 2, and eliminated one-word responses and multiple-choice answers. No maxiumum answer length was set.</p>
 
 ## Augmentation and Balancing
-<p>The <b>PELIC</b> dataset was very imbalanced by level, with the following value counts:</p>
-
-| level | count |
-|-------|-------|
-| 4     | 12163 |
-| 5     | 10094 |
-| 3     | 7993  |
-| 2     | 849   |
-
-<p>To address this issue, the level 2 class was doubled using GPT2Tokenizer and GPT2LMHeadModel. The texts were augmented by using AI to rephrase and generate a continuation of each answer. The second half of the AI generated texts were then truncated to get the augmented data sample. The generator uses top-k and nucleus sampling, which helps to retain the style of the text. It was considered that a simpler augmentation technique could be used, such as random shuffling and insertion, or synonym replacement; however, this wouldn't have conserved the grammatical structure of the answers, which is needed to be able to match patterns. The augmentation function is found in <a href="https://github.com/jdolane/ESL_Writing_Classification/blob/main/notebooks/augment/Augment.ipynb" target="_blank">Augment.ipynb</a></p>
+<p>The <b>PELIC</b> dataset was very imbalanced by level. To address this issue, the level 2 class was doubled using GPT2Tokenizer and GPT2LMHeadModel. The texts were augmented by using AI to rephrase and generate a continuation of each answer. The second half of the AI generated texts were then truncated to get the augmented data sample. The generator uses top-k and nucleus sampling, which helps to retain the style of the text. It was considered that a simpler augmentation technique could be used, such as random shuffling and insertion, or synonym replacement; however, this wouldn't have conserved the grammatical structure of the answers, which is needed to be able to match patterns. The augmentation function is found in <a href="https://github.com/jdolane/ESL_Writing_Classification/blob/main/notebooks/augment/Augment.ipynb" target="_blank">Augment.ipynb</a></p>
 
 <p>Once the answers of the level 2 class were augmented, the answers from the remaining classes (3, 4, and 5) were reduced. The reduction was not random; rather, a function was used to choose the longest answers first, and to not choose an answer from the same question twice, where possible, until the data was balanced. The balancing function is found in the notebooks in the <a href="https://github.com/jdolane/ESL_Writing_Classification/tree/main/notebooks/balance" target="_blank">balancing</a> folder.</p>
+
+### Value counts of level before and after augmentation and balancing
+| Dataset | Level | Original Count | Count After Augmentation | Count After Balancing |
+|---------|-------|----------------|--------------------------|-----------------------|
+| PELIC | 4  |  12,163 | 12,163 | 1,698 |
+| PELIC | 5  |  10,094 | 10,094 | 1,698 |
+| PELIC | 3 | 7,993 | 7,993 | 1,698 | 
+| PELIC | 2 | 849 | 1,698 | 1,698 |
+| ASAG | 3 | 97 | 97 | 56 |
+| ASAG | 4 | 67 | 67 | 56 |
+| ASAG | 2 | 54 | 56 | 56 |
+| ASAG | 5 | 28 | 56 | 56 |
 
 <img src="images/augmented_by_dataset.png" alt="Count of Augmented Rows by Dataset" width="50%">
 
@@ -125,6 +128,8 @@ Class | Level description  | CEFR level
 5	       | Advanced           | B2+/C1
 
 ### MLP Classifier
+Four different algorithms have been used to classify the data with y being 'level_id' for the PELIC dataset and 'grade_majority_vote' for the ASAG dataset. The performace metrics of each model are below, in descending order by performance.
+
 #### Overall Accuracy: 0.74
 
 | Class | Precision | Recall | F1-Score |
@@ -135,16 +140,20 @@ Class | Level description  | CEFR level
 | 5    |   0.74   |   0.67  |    0.71 |
 | weighted avg   |    0.74  |    0.74   |   0.74 |
 
+<img src="images/mlp_cm.png" width=50%>
+
 ### Random Forest
 #### Overall Accuracy: 0.73
 
 | Class | Precision | Recall | F1-Score |
 |-------|-----------|--------|----------|
 | 2    |   0.66  |    0.90   |   0.76 |
-| 3   |    0.92  |    0.65   |   0.76 |
+| 3   |   0.92  |    0.65   |   0.76 |
 | 4    |   0.73   |   0.69   |   0.71 |
 | 5   |    0.71  |    0.70   |   0.71 |
 | weighted avg   |    0.75   |   0.73   |   0.73 |
+
+<img src="images/rf_cm.png" width=50%>
 
 ### Linear SVC
 #### Overall Accuracy: 0.61
